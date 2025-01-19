@@ -1,0 +1,4 @@
+patch type="added" "Set is_screencast on VideoTrackSource creation" package="webrtc-sys"
+patch type="added" "Set is_screencast on NativeVideoSource creation" package="libwebrtc"
+patch type="added" "Extend NewVideoSourceRequest with is_screencast" package="livekit-ffi"
+patch type="changed" "Use new NativeVideoSource constructor in examples" package="examples"

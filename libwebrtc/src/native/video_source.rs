@@ -1,4 +1,4 @@
-// Copyright 2023 LiveKit, Inc.
+// Copyright 2023-2025 LiveKit, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -50,11 +50,12 @@ struct VideoSourceInner {
 }
 
 impl NativeVideoSource {
-    pub fn new(resolution: VideoResolution) -> NativeVideoSource {
+    pub fn new(resolution: VideoResolution, is_screencast: bool) -> NativeVideoSource {
         let source = Self {
-            sys_handle: vt_sys::ffi::new_video_track_source(&vt_sys::ffi::VideoResolution::from(
-                resolution.clone(),
-            )),
+            sys_handle: vt_sys::ffi::new_video_track_source(
+                &vt_sys::ffi::VideoResolution::from(resolution.clone()),
+                is_screencast,
+            ),
             inner: Arc::new(Mutex::new(VideoSourceInner { captured_frames: 0 })),
         };
 

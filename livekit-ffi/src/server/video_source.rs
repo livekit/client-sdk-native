@@ -1,4 +1,4 @@
-// Copyright 2023 LiveKit, Inc.
+// Copyright 2023-2025 LiveKit, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -35,8 +35,10 @@ impl FfiVideoSource {
             #[cfg(not(target_arch = "wasm32"))]
             proto::VideoSourceType::VideoSourceNative => {
                 use livekit::webrtc::video_source::native::NativeVideoSource;
-
-                let video_source = NativeVideoSource::new(new_source.resolution.into());
+                let video_source = NativeVideoSource::new(
+                    new_source.resolution.into(),
+                    new_source.is_screencast(),
+                );
                 RtcVideoSource::Native(video_source)
             }
             _ => return Err(FfiError::InvalidRequest("unsupported video source type".into())),

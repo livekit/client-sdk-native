@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 LiveKit
+ * Copyright 2023-2025 LiveKit
  *
  * Licensed under the Apache License, Version 2.0 (the “License”);
  * you may not use this file except in compliance with the License.
@@ -105,13 +105,16 @@ std::shared_ptr<NativeVideoSink> new_native_video_sink(
 }
 
 VideoTrackSource::InternalSource::InternalSource(
-    const VideoResolution& resolution)
-    : rtc::AdaptedVideoTrackSource(4), resolution_(resolution) {}
+    const VideoResolution& resolution,
+    bool is_screencast)
+    : rtc::AdaptedVideoTrackSource(4),
+      resolution_(resolution),
+      is_screencast_(is_screencast) {}
 
 VideoTrackSource::InternalSource::~InternalSource() {}
 
 bool VideoTrackSource::InternalSource::is_screencast() const {
-  return false;
+  return is_screencast_;
 }
 
 absl::optional<bool> VideoTrackSource::InternalSource::needs_denoising() const {
@@ -175,8 +178,9 @@ bool VideoTrackSource::InternalSource::on_captured_frame(
   return true;
 }
 
-VideoTrackSource::VideoTrackSource(const VideoResolution& resolution) {
-  source_ = rtc::make_ref_counted<InternalSource>(resolution);
+VideoTrackSource::VideoTrackSource(const VideoResolution& resolution,
+                                   bool is_screencast) {
+  source_ = rtc::make_ref_counted<InternalSource>(resolution, is_screencast);
 }
 
 VideoResolution VideoTrackSource::video_resolution() const {
@@ -195,8 +199,9 @@ rtc::scoped_refptr<VideoTrackSource::InternalSource> VideoTrackSource::get()
 }
 
 std::shared_ptr<VideoTrackSource> new_video_track_source(
-    const VideoResolution& resolution) {
-  return std::make_shared<VideoTrackSource>(resolution);
+    const VideoResolution& resolution,
+    bool is_screencast) {
+  return std::make_shared<VideoTrackSource>(resolution, is_screencast);
 }
 
 }  // namespace livekit

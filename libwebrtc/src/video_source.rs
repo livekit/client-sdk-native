@@ -1,4 +1,4 @@
-// Copyright 2024 LiveKit, Inc.
+// Copyright 2024-2025 LiveKit, Inc.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -58,13 +58,13 @@ pub mod native {
 
     impl Default for NativeVideoSource {
         fn default() -> Self {
-            Self::new(VideoResolution::default())
+            Self::new(VideoResolution::default(), false)
         }
     }
 
     impl NativeVideoSource {
-        pub fn new(resolution: VideoResolution) -> Self {
-            Self { handle: vs_imp::NativeVideoSource::new(resolution) }
+        pub fn new(resolution: VideoResolution, is_screencast: bool) -> Self {
+            Self { handle: vs_imp::NativeVideoSource::new(resolution, is_screencast) }
         }
 
         pub fn capture_frame<T: AsRef<dyn VideoBuffer>>(&self, frame: &VideoFrame<T>) {
